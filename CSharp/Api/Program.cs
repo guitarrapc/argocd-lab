@@ -1,9 +1,14 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateSlimBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+});
 
 var app = builder.Build();
 
@@ -45,4 +50,11 @@ internal record MachineInformation(string MachineName, string OSDescription, int
         Environment.ProcessorCount,
         GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / (1024 * 1024)
     );
+}
+
+[System.Text.Json.Serialization.JsonSerializable(typeof(WeatherForecast[]))]
+[System.Text.Json.Serialization.JsonSerializable(typeof(MachineInformation))]
+internal partial class AppJsonSerializerContext : System.Text.Json.Serialization.JsonSerializerContext
+{
+
 }
