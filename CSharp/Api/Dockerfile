@@ -24,7 +24,7 @@ WORKDIR "/src/Api"
 RUN dotnet build "./Api.csproj" -a $TARGETARCH -c $BUILD_CONFIGURATION -o /app/build
 # Setup objcopy for ARM64 cross-compilation
 RUN if [ "$TARGETARCH" = "arm64" ]; then ln -sf /usr/bin/aarch64-linux-gnu-objcopy /usr/local/bin/objcopy; fi
-RUN dotnet publish "./Api.csproj" -a $TARGETARCH -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Api.csproj" -a $TARGETARCH -c $BUILD_CONFIGURATION -o /app/publish
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
