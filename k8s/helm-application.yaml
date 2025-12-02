@@ -7,12 +7,13 @@ metadata:
 spec:
   project: default
   source:
-    chart: argocd-lab
     repoURL: https://github.com/guitarrapc/argocd-lab.git
     targetRevision: main
-    path: k8s/helam-api/
+    path: k8s/helm-api/
     helm:
       releaseName: argocd-lab
+      valueFiles:
+        - values.yaml
   destination:
     name: in-cluster # Rename to actual cluster name if needed
     namespace: argocd-lab
