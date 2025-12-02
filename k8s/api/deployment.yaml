@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-csharp
+  namespace: argocd-lab
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -30,6 +31,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-go
+  namespace: argocd-lab
 spec:
   replicas: 1
   revisionHistoryLimit: 3
