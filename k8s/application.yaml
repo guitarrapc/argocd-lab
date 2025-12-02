@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-lab
+  namespace: argocd
+spec:
+  project: guitarrapc
+  source:
+    repoURL: https://github.com/guitarrapc/argocd-lab.git
+    targetRevision: main
+    path: k8s/api
+  destination:
+    name: test-cluster # Rename to actual cluster name if needed
+    namespace: argocd-lab
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

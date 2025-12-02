@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-csharp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: api-csharp
+  template:
+    metadata:
+      labels:
+        app: api-csharp
+    spec:
+      containers:
+        - image: docker pull ghcr.io/guitarrapc/devtron-lab:latest-csharp
+          name: api-csharp
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-go
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: api-go
+  template:
+    metadata:
+      labels:
+        app: api-go
+    spec:
+      containers:
+        - image: docker pull ghcr.io/guitarrapc/devtron-lab:latest-go
+          name: api-go
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
