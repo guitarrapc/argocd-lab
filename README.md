@@ -1,1 +1,1 @@
-# devtron-lab
+# argocd-lab
