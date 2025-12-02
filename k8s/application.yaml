@@ -10,7 +10,7 @@ spec:
     targetRevision: main
     path: k8s/api
   destination:
-    name: test-cluster # Rename to actual cluster name if needed
+    name: in-cluster # Rename to actual cluster name if needed
     namespace: argocd-lab
   syncPolicy:
     automated:
