@@ -1,4 +1,4 @@
-# kubectl apply -f k8s/application.yaml -n argocd
+# kubectl apply -f k8s/kustomize-application.yaml -n argocd
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/guitarrapc/argocd-lab.git
     targetRevision: main
-    path: k8s/api
+    path: k8s/kustomize-api
   destination:
     name: in-cluster # Rename to actual cluster name if needed
     namespace: argocd-lab
