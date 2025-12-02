@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/guitarrapc/argocd-lab.git
     targetRevision: main
-    path: k8s/api
+    path: k8s/api/
   destination:
     name: in-cluster # Rename to actual cluster name if needed
     namespace: argocd-lab

@@ -15,10 +15,19 @@ spec:
         app: api-csharp
     spec:
       containers:
-        - image: ghcr.io/guitarrapc/argocd-lab:latest-csharp
-          name: api-csharp
+        - name: api-csharp
+          image: ghcr.io/guitarrapc/argocd-lab:latest-csharp
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
           resources:
             requests:
               memory: "128Mi"
@@ -43,10 +52,19 @@ spec:
         app: api-go
     spec:
       containers:
-        - image: ghcr.io/guitarrapc/argocd-lab:latest-go
-          name: api-go
+        - name: api-go
+          image: ghcr.io/guitarrapc/argocd-lab:latest-go
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
           resources:
             requests:
               memory: "128Mi"

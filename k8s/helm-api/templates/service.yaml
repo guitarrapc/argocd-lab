@@ -1,0 +1,40 @@
+# no namespace declared here for argocd to manage it
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "helm-api.name.csharp" . }}
+  labels:
+    app: {{ template "helm-api.name.csharp" . }}
+    chart: {{ template "helm-api.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "helm-api.name.csharp" . }}
+    release: {{ .Release.Name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "helm-api.name.go" . }}
+  labels:
+    app: {{ template "helm-api.name.go" . }}
+    chart: {{ template "helm-api.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "helm-api.name.go" . }}
+    release: {{ .Release.Name }}
