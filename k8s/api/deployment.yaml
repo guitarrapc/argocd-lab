@@ -15,7 +15,7 @@ spec:
         app: api-csharp
     spec:
       containers:
-        - image: ghcr.io/guitarrapc/argocd-lab:latest-go:latest-csharp
+        - image: ghcr.io/guitarrapc/argocd-lab:latest-csharp
           name: api-csharp
           ports:
             - containerPort: 8080
@@ -44,7 +44,7 @@ spec:
         app: api-go
     spec:
       containers:
-        - image: ghcr.io/guitarrapc/argocd-lab:latest-go:latest-go
+        - image: ghcr.io/guitarrapc/argocd-lab:latest-go
           name: api-go
           ports:
             - containerPort: 8080
