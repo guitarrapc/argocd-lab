@@ -1,0 +1,150 @@
+# kubectl apply -f k8s/kro/definition/resourcegraphdefinition.yaml
+apiVersion: kro.run/v1alpha1
+kind: ResourceGraphDefinition
+metadata:
+  name: api-application
+  # for argocd tracking
+  ownerReferences:
+    - apiVersion: kro.run/v1alpha1
+      kind: ${schema.kind}
+      name: ${schema.metadata.name}
+      uid: ${schema.metadata.uid}
+      blockOwnerDeletion: true
+      controller: false
+  annotations:
+    argocd.argoproj.io/tracking-id: ${schema.metadata.?annotations["argocd.argoproj.io/tracking-id"]}
+
+spec:
+  schema:
+    apiVersion: v1alpha1
+    kind: ApiApplication
+    spec:
+      applicationName: string
+      repository: string | default="ghcr.io/guitarrapc/argocd-lab"
+      tagcsharp: string | default="latest-csharp"
+      taggo: string | default="latest-go"
+      pullPolicy: string | default="IfNotPresent"
+      apicsharp:
+        enableed: boolean | default=true
+        replicas: integer | default=1
+        containerport: integer | default=8080
+      apigo:
+        enableed: boolean | default=true
+        replicas: integer | default=1
+        containerport: integer | default=8080
+      service:
+        type: string | default="ClusterIP"
+        port: integer | default=80
+
+  resources:
+    - id: apicsharp
+      includeWhen:
+        - ${schema.spec.apicsharp.enableed}
+      template:
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: ${schema.spec.applicationName}-csharp
+        spec:
+          replicas: 1
+          revisionHistoryLimit: 3
+          selector:
+            matchLabels:
+              app: ${schema.spec.applicationName}-csharp
+          template:
+            metadata:
+              labels:
+                app: ${schema.spec.applicationName}-csharp
+            spec:
+              containers:
+                - name: ${schema.spec.applicationName}-csharp
+                  image: ${schema.spec.repository}:${schema.spec.tagcsharp}
+                  imagePullPolicy: ${schema.spec.pullPolicy}
+                  ports:
+                    - name: http
+                      containerPort: ${schema.spec.apicsharp.containerport}
+                  livenessProbe:
+                    httpGet:
+                      path: /healthz
+                      port: http
+                  readinessProbe:
+                    httpGet:
+                      path: /healthz
+                      port: http
+                  resources:
+                    requests:
+                      memory: "128Mi"
+                      cpu: "250m"
+                    limits:
+                      memory: "256Mi"
+                      cpu: "500m"
+
+    - id: apigo
+      includeWhen:
+        - ${schema.spec.apigo.enableed}
+      template:
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: ${schema.spec.applicationName}-go
+        spec:
+          replicas: 1
+          revisionHistoryLimit: 3
+          selector:
+            matchLabels:
+              app: ${schema.spec.applicationName}-go
+          template:
+            metadata:
+              labels:
+                app: ${schema.spec.applicationName}-go
+            spec:
+              containers:
+                - name: ${schema.spec.applicationName}-go
+                  image: ${schema.spec.repository}:${schema.spec.taggo}
+                  imagePullPolicy: ${schema.spec.pullPolicy}
+                  ports:
+                    - name: http
+                      containerPort: ${schema.spec.apigo.containerport}
+                  livenessProbe:
+                    httpGet:
+                      path: /healthz
+                      port: http
+                  readinessProbe:
+                    httpGet:
+                      path: /healthz
+                      port: http
+                  resources:
+                    requests:
+                      memory: "128Mi"
+                      cpu: "250m"
+                    limits:
+                      memory: "256Mi"
+                      cpu: "500m"
+
+    - id: apicsharpsvc
+      template:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: ${schema.spec.applicationName}-csharp-svc
+        spec:
+          type: ${schema.spec.service.type}
+          ports:
+            - port: ${schema.spec.service.port}
+              targetPort: http
+          selector:
+            app: ${schema.spec.applicationName}-csharp
+
+    - id: apigosvc
+      template:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: ${schema.spec.applicationName}-go-svc
+        spec:
+          type: ${schema.spec.service.type}
+          ports:
+            - port: ${schema.spec.service.port}
+              targetPort: http
+          selector:
+            app: ${schema.spec.applicationName}-go

@@ -1,0 +1,25 @@
+# kubectl apply -f k8s/kro/application.yaml
+apiVersion: kro.run/v1alpha1
+kind: ApiApplication
+metadata:
+  name: my-api-app
+  #namespace: default
+spec:
+  repository: ghcr.io/guitarrapc/argocd-lab
+  tagcsharp: v0.2.0-csharp
+  taggo: v0.2.0-go
+  pullPolicy: IfNotPresent
+
+  api-csharp:
+    enableed: true
+    containerport: 8080
+    replicas: 1
+
+  api-go:
+    enableed: true
+    containerport: 8080
+    replicas: 1
+
+  service:
+    type: ClusterIP
+    port: 80
