@@ -4,7 +4,9 @@ kind: Service
 metadata:
   name: {{ template "helm-api.name.csharp" . }}
   labels:
-    app: {{ template "helm-api.name.csharp" . }}
+    app.kubernetes.io/name: api
+    app.kubernetes.io/component: {{ template "helm-api.name.csharp" . }}
+    app.kubernetes.io/part-of: api-application
     chart: {{ template "helm-api.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -24,7 +26,9 @@ kind: Service
 metadata:
   name: {{ template "helm-api.name.go" . }}
   labels:
-    app: {{ template "helm-api.name.go" . }}
+    app.kubernetes.io/name: api
+    app.kubernetes.io/component: {{ template "helm-api.name.go" . }}
+    app.kubernetes.io/part-of: api-application
     chart: {{ template "helm-api.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

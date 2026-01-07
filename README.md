@@ -20,23 +20,23 @@ You can generate diagrams of the Kubernetes manifests using [KubeDiagrams](https
 k8s/api
 
 ```sh
-docker run -v "$(pwd)":/work philippemerle/kubediagrams kube-diagrams -o api.png k8s/api/deployment.yaml
+docker run -v "$(pwd)":/work philippemerle/kubediagrams kube-diagrams -o images/api.png k8s/api/deployment.yaml
 ```
-
-![Kubernetes Manifests Diagram](images/api.png)
-
-k8s/helm-api
-
-```sh
-helm template ./k8s/helm-api | docker run -v "$(pwd)":/work -i philippemerle/kubediagrams kube-diagrams - -o helm-api.png
-```
-
-![Kustomize Diagram](images/helm-api.png)
 
 k8s/kustomize-api
 
 ```sh
-kubectl kustomize ./k8s/kustomize-api/ | docker run -v "$(pwd)":/work -i philippemerle/kubediagrams kube-diagrams - -o kustomize-api.png
+kubectl kustomize ./k8s/kustomize-api/ | docker run -i -v "$(pwd)":/work philippemerle/kubediagrams kube-diagrams - -o images/kustomize-api.png
 ```
 
-![Kustomize Diagram](images/kustomize-api.png)
+k8s/helm-api
+
+```sh
+helm template ./k8s/helm-api | docker run -i -v "$(pwd)":/work philippemerle/kubediagrams kube-diagrams - -o images/helm-api.png
+```
+
+Generated Diagrams
+
+| k8s/api | k8s/kustomize-api | k8s/helm-api |
+| --- | --- | --- |
+| ![Kubernetes Manifests Diagram](images/api.png) | ![Kustomize Diagram](images/kustomize-api.png) | ![Kustomize Diagram](images/helm-api.png)
